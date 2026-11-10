@@ -20,6 +20,8 @@ OBJ_DIR			=	obj
 INC_DIR			=	include
 
 INCLUDES		=	-I$(INC_DIR)
+HEADERS			=	$(INC_DIR)/get_next_line.h \
+					$(INC_DIR)/get_next_line_bonus.h
 
 SRC_FILES		=	get_next_line.c \
 					get_next_line_utils.c
@@ -45,7 +47,7 @@ bonus: $(BONUS_OBJS)
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(wildcard $(INC_DIR)/*.h) | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS) | $(OBJ_DIR)
 	@$(LOG) "$(C_BUILD)" compiling "$<"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
