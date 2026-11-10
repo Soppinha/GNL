@@ -1,5 +1,17 @@
 NAME			=	libgnl.a
 
+# ********************************* OUTPUT ********************************** #
+
+TAG			=	gnl
+RESET		=	\033[0m
+C_TAG		=	\033[1;34m
+C_BUILD		=	\033[0;32m
+C_DONE		=	\033[1;32m
+C_CLEAN		=	\033[0;33m
+C_RM		=	\033[0;31m
+LOG			=	printf "$(C_TAG)%-12s$(RESET) %b%-10s$(RESET) %s\n" "[$(TAG)]"
+SUBMAKE		=	$(MAKE) -s --no-print-directory -C
+
 CC				=	cc
 CFLAGS			=	-Wall -Wextra -Werror
 
@@ -23,26 +35,27 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	@rm -f $(NAME)
 	@ar rcs $(NAME) $(OBJS)
-	@echo "✅ $(NAME) created (mandatory)"
+	@$(LOG) "$(C_DONE)" archived "$(NAME) (mandatory)"
 
 bonus: $(BONUS_OBJS)
 	@rm -f $(NAME)
 	@ar rcs $(NAME) $(BONUS_OBJS)
-	@echo "✅ $(NAME) created (bonus: multiple fds)"
+	@$(LOG) "$(C_DONE)" archived "$(NAME) (bonus)"
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(wildcard $(INC_DIR)/*.h) | $(OBJ_DIR)
+	@$(LOG) "$(C_BUILD)" compiling "$<"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@echo "🧹 Object files removed."
+	@$(LOG) "$(C_CLEAN)" cleaned objects
 
 fclean: clean
 	@rm -f $(NAME)
-	@echo "🗑️  Library removed."
+	@$(LOG) "$(C_RM)" removed "$(NAME)"
 
 re: fclean all
 
