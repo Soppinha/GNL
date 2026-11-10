@@ -1,24 +1,43 @@
-NAME		= get_next_line.a
+NAME			=	libgnl.a
 
-CC			= cc
-CFLAGS		= -Wall -Wextra -Werror
+CC				=	cc
+CFLAGS			=	-Wall -Wextra -Werror
 
-SRC			= get_next_line.c \
-			  get_next_line_utils.c
+SRC_DIR			=	src
+OBJ_DIR			=	obj
+INC_DIR			=	include
 
-OBJ			= $(SRC:.c=.o)
+INCLUDES		=	-I$(INC_DIR)
+
+SRC_FILES		=	get_next_line.c \
+					get_next_line_utils.c
+
+BONUS_FILES		=	get_next_line_bonus.c \
+					get_next_line_utils_bonus.c
+
+OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
+BONUS_OBJS		=	$(addprefix $(OBJ_DIR)/, $(BONUS_FILES:.c=.o))
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	@ar rcs $(NAME) $(OBJ)
-	@echo "✅ $(NAME) created successfully!"
+$(NAME): $(OBJS)
+	@rm -f $(NAME)
+	@ar rcs $(NAME) $(OBJS)
+	@echo "✅ $(NAME) created (mandatory)"
 
-%.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
+bonus: $(BONUS_OBJS)
+	@rm -f $(NAME)
+	@ar rcs $(NAME) $(BONUS_OBJS)
+	@echo "✅ $(NAME) created (bonus: multiple fds)"
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(wildcard $(INC_DIR)/*.h) | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	@rm -f $(OBJ)
+	@rm -rf $(OBJ_DIR)
 	@echo "🧹 Object files removed."
 
 fclean: clean
@@ -27,4 +46,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all bonus clean fclean re

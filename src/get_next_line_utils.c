@@ -98,7 +98,7 @@ char	*ft_update_stash(char *stash)
 	i = 0;
 	while (stash[i] && stash[i] != '\n')
 		i++;
-	if (!stash[i++])
+	if (!stash[i++] || !stash[i])
 		return (free(stash), NULL);
 	new = malloc(ft_gnl_strlen(stash + i) + 1);
 	if (!new)

@@ -46,6 +46,12 @@ char	*get_next_line(int fd)
 	if (!stash)
 		return (NULL);
 	line = ft_extract_line(stash);
+	if (!line)
+	{
+		free(stash);
+		stash = NULL;
+		return (NULL);
+	}
 	stash = ft_update_stash(stash);
 	return (line);
 }
