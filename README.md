@@ -113,4 +113,4 @@ Each returned line is allocated with `malloc` and must be freed by the caller.
 
 ### AI usage
 
-AI was used to draft this README from the source code. The mandatory part was written by the author; the bonus (multi-fd stash) and the folder reorganization were done with AI assistance and reviewed and tested by the author.
+AI was used to draft this README from the existing source code. The implementation was written by the author.
